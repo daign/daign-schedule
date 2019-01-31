@@ -1,0 +1,59 @@
+{
+  "name": "@daign/schedule",
+  "version": "1.0.0",
+  "description": "Utilty mechanisms to manage the time-wise execution of functions.",
+  "keywords": [
+    "typescript"
+  ],
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "files": [
+    "dist/lib/**/*"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && mkdir dist && tsc",
+    "lint": "tslint '{lib,test}/**/*.ts'",
+    "test": "nyc mocha -r ts-node/register test/**/*.spec.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daign/daign-schedule.git"
+  },
+  "author": "Jakob Mischek <jakob.mischek@daign.de> (https://github.com/daign)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daign/daign-schedule/issues"
+  },
+  "homepage": "https://github.com/daign/daign-schedule#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "sinon": "^7.0.0",
+    "source-map-support": "^0.5.10",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.1",
+    "tslint-no-unused-expression-chai": "^0.1.4",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {},
+  "nyc": {
+    "include": [
+      "lib/**/*.ts"
+    ],
+    "exclude": [
+      "lib/**/*.spec.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  }
+}
