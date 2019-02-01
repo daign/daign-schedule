@@ -1,7 +1,7 @@
 {
   "name": "@daign/schedule",
   "version": "1.0.0",
-  "description": "Utilty mechanisms to manage the time-wise execution of functions.",
+  "description": "Utility mechanisms to manage the time-wise execution of functions.",
   "keywords": [
     "typescript"
   ],
