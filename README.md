@@ -2,7 +2,7 @@
 
 [![NPM package][npm]][npm-url]
 
-Utilty mechanisms to manage the time-wise execution of functions.
+Utility mechanisms to manage the time-wise execution of functions.
 
 ## Installation
 
