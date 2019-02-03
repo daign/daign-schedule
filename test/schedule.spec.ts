@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import * as sinon from 'sinon';
 
 import {Schedule} from '../lib/schedule';
 
@@ -52,6 +53,36 @@ describe( 'Schedule', () => {
       const postponedFunction = Schedule.postpone( test.method, wait, test );
       postponedFunction();
     } );
+
+    it( 'should not call before wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const postponedFunction = Schedule.postpone( spy, wait );
+      postponedFunction();
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.notCalled ).to.be.true;
+        done();
+      }, wait * 0.5 );
+    } );
+
+    it( 'should have called after wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const postponedFunction = Schedule.postpone( spy, wait );
+      postponedFunction();
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.calledOnce ).to.be.true;
+        done();
+      }, wait * 1.5 );
+    } );
   } );
 
   describe( 'blockingThrottle', () => {
@@ -100,6 +131,44 @@ describe( 'Schedule', () => {
       const throttledFunction = Schedule.blockingThrottle( test.method, wait, test );
       throttledFunction();
     } );
+
+    it( 'should block calls that come before wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const throttledFunction = Schedule.blockingThrottle( spy, wait );
+      throttledFunction();
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 0.5 );
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.calledOnce ).to.be.true;
+        done();
+      }, wait * 1.5 );
+    } );
+
+    it( 'should not block calls that come after wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const throttledFunction = Schedule.blockingThrottle( spy, wait );
+      throttledFunction();
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 1.5 );
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.callCount ).to.equal( 2 );
+        done();
+      }, wait * 2 );
+    } );
   } );
 
   describe( 'deferringThrottle', () => {
@@ -147,6 +216,72 @@ describe( 'Schedule', () => {
       // act
       const throttledFunction = Schedule.deferringThrottle( test.method, wait, test );
       throttledFunction();
+    } );
+
+    it( 'should block calls that come before wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const throttledFunction = Schedule.deferringThrottle( spy, wait );
+      throttledFunction();
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 0.5 );
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.calledOnce ).to.be.true;
+        done();
+      }, wait * 0.75 );
+    } );
+
+    it( 'should execute once after wait time has elapsed if calls were blocked', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const throttledFunction = Schedule.deferringThrottle( spy, wait );
+      throttledFunction();
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 0.5 );
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 0.6 );
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 0.7 );
+
+      // assert
+      setTimeout( (): void => {
+        // one for the first call plus one for the deferred calls
+        expect( spy.callCount ).to.equal( 2 );
+        done();
+      }, wait * 3 );
+    } );
+
+    it( 'should not block calls that come after wait time has elapsed', ( done: any ) => {
+      // arrange
+      const spy = sinon.spy();
+
+      // act
+      const throttledFunction = Schedule.deferringThrottle( spy, wait );
+      throttledFunction();
+
+      setTimeout( (): void => {
+        throttledFunction();
+      }, wait * 1.5 );
+
+      // assert
+      setTimeout( (): void => {
+        expect( spy.callCount ).to.equal( 2 );
+        done();
+      }, wait * 1.75 );
     } );
   } );
 } );
