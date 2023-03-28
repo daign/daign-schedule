@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { spy } from 'sinon';
 
-import { Schedule } from '../lib/schedule';
+import { Schedule } from '../lib';
 
 describe( 'Schedule', (): void => {
   // The waiting time period in milliseconds for all tests.
@@ -56,30 +56,30 @@ describe( 'Schedule', (): void => {
 
     it( 'should not call before wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const postponedFunction = Schedule.postpone( spy, wait );
+      const postponedFunction = Schedule.postpone( callbackSpy, wait );
       postponedFunction();
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.notCalled ).to.be.true;
+        expect( callbackSpy.notCalled ).to.be.true;
         done();
       }, wait * 0.5 );
     } );
 
     it( 'should have called after wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const postponedFunction = Schedule.postpone( spy, wait );
+      const postponedFunction = Schedule.postpone( callbackSpy, wait );
       postponedFunction();
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.calledOnce ).to.be.true;
+        expect( callbackSpy.calledOnce ).to.be.true;
         done();
       }, wait * 1.5 );
     } );
@@ -134,10 +134,10 @@ describe( 'Schedule', (): void => {
 
     it( 'should block calls that come before wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const throttledFunction = Schedule.blockingThrottle( spy, wait );
+      const throttledFunction = Schedule.blockingThrottle( callbackSpy, wait );
       throttledFunction();
 
       setTimeout( (): void => {
@@ -146,17 +146,17 @@ describe( 'Schedule', (): void => {
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.calledOnce ).to.be.true;
+        expect( callbackSpy.calledOnce ).to.be.true;
         done();
       }, wait * 1.5 );
     } );
 
     it( 'should not block calls that come after wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const throttledFunction = Schedule.blockingThrottle( spy, wait );
+      const throttledFunction = Schedule.blockingThrottle( callbackSpy, wait );
       throttledFunction();
 
       setTimeout( (): void => {
@@ -165,7 +165,7 @@ describe( 'Schedule', (): void => {
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.callCount ).to.equal( 2 );
+        expect( callbackSpy.callCount ).to.equal( 2 );
         done();
       }, wait * 2 );
     } );
@@ -220,10 +220,10 @@ describe( 'Schedule', (): void => {
 
     it( 'should block calls that come before wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const throttledFunction = Schedule.deferringThrottle( spy, wait );
+      const throttledFunction = Schedule.deferringThrottle( callbackSpy, wait );
       throttledFunction();
 
       setTimeout( (): void => {
@@ -232,7 +232,7 @@ describe( 'Schedule', (): void => {
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.calledOnce ).to.be.true;
+        expect( callbackSpy.calledOnce ).to.be.true;
         done();
       }, wait * 0.75 );
     } );
@@ -240,10 +240,10 @@ describe( 'Schedule', (): void => {
     it( 'should execute once after wait time has elapsed if calls were blocked',
       ( done: any ): void => {
         // Arrange
-        const spy = sinon.spy();
+        const callbackSpy = spy();
 
         // Act
-        const throttledFunction = Schedule.deferringThrottle( spy, wait );
+        const throttledFunction = Schedule.deferringThrottle( callbackSpy, wait );
         throttledFunction();
 
         setTimeout( (): void => {
@@ -261,7 +261,7 @@ describe( 'Schedule', (): void => {
         // Assert
         setTimeout( (): void => {
           // One for the first call plus one for the deferred calls
-          expect( spy.callCount ).to.equal( 2 );
+          expect( callbackSpy.callCount ).to.equal( 2 );
           done();
         }, wait * 3 );
       }
@@ -269,10 +269,10 @@ describe( 'Schedule', (): void => {
 
     it( 'should not block calls that come after wait time has elapsed', ( done: any ): void => {
       // Arrange
-      const spy = sinon.spy();
+      const callbackSpy = spy();
 
       // Act
-      const throttledFunction = Schedule.deferringThrottle( spy, wait );
+      const throttledFunction = Schedule.deferringThrottle( callbackSpy, wait );
       throttledFunction();
 
       setTimeout( (): void => {
@@ -281,7 +281,7 @@ describe( 'Schedule', (): void => {
 
       // Assert
       setTimeout( (): void => {
-        expect( spy.callCount ).to.equal( 2 );
+        expect( callbackSpy.callCount ).to.equal( 2 );
         done();
       }, wait * 1.75 );
     } );

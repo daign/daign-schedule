@@ -5,9 +5,9 @@ export abstract class Schedule {
   /**
    * Gives back a modification of the passed function, that whenever called will only execute after
    * a specified time period has elapsed.
-   * @param callback The function to be modified
-   * @param wait The waiting time period in milliseconds
-   * @param context The this-context of the function
+   * @param callback - The function to be modified
+   * @param wait - The waiting time period in milliseconds
+   * @param context - The this-context of the function
    * @returns The modified function
    */
   public static postpone(
@@ -23,9 +23,9 @@ export abstract class Schedule {
   /**
    * Gives back a modification of the passed function, that whenever called will block all following
    * calls from execution for a specified time period.
-   * @param callback The function to be modified
-   * @param wait The waiting time period in milliseconds, 60ms = 16fps, 40ms = 25fps, 20ms = 50fps
-   * @param context The this-context of the function
+   * @param callback - The function to be modified
+   * @param wait - The waiting time period in milliseconds, 60ms = 16fps, 40ms = 25fps, 20ms = 50fps
+   * @param context - The this-context of the function
    * @returns The modified function
    */
   public static blockingThrottle(
@@ -48,9 +48,9 @@ export abstract class Schedule {
    * Gives back a modification of the passed function, that whenever called will block all following
    * calls from execution for a specified time period, but executes once at the end of the time
    * period if there was a blocked call in the meantime.
-   * @param callback The function to be modified
-   * @param wait The waiting time period in milliseconds, 60ms = 16fps, 40ms = 25fps, 20ms = 50fps
-   * @param context The this-context of the function
+   * @param callback - The function to be modified
+   * @param wait - The waiting time period in milliseconds, 60ms = 16fps, 40ms = 25fps, 20ms = 50fps
+   * @param context - The this-context of the function
    * @returns The modified function
    */
   public static deferringThrottle(
